@@ -3,11 +3,12 @@ import React from "react";
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { Web3Auth } from "@web3auth/modal";
 import { ethersRPC } from "./ethersRPC";
+import { ethers } from "ethers";
 
 const clientId =
   "BIUsf57Ux9ezViHnb5VEAnK2nX6nVRv2Kw-jom21XqvBqr22cDQBi3MdsOzHnMtzRSaoybCUhhGf4YMc0llIQpk"; // get from https://dashboard.web3auth.io
 
-export function CosmosWeb3Auth(props) {
+export function CosmosWeb3Auth({ setAppWeb3authProvider }) {
   const [web3auth, setWeb3auth] = React.useState(null);
   const [provider, setProvider] = React.useState(null);
   const {
@@ -84,7 +85,10 @@ export function CosmosWeb3Auth(props) {
 
         setWeb3auth(web3auth);
         const web3authProvider = await web3auth.connect();
-        props.setAppWeb3authProvider(web3authProvider);
+        const ethersProvider = new ethers.providers.Web3Provider(
+          web3authProvider
+        );
+        setAppWeb3authProvider(web3auth.provider);
 
         if (web3auth.provider) {
           setProvider(web3auth.provider);

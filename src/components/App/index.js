@@ -1,6 +1,6 @@
 import React from "react";
 import { CosmosWeb3Auth } from "../CosmosWeb3Auth";
-const ethers = require("ethers");
+import { ethers } from "ethers";
 const { RelayProvider } = require("@opengsn/provider");
 const { Web3Auth } = require("@web3auth/modal");
 
@@ -8,14 +8,17 @@ const paymasterAddress = "0x7C10d29cfc9951958d8ffF6d9D9c9697A146bf70";
 const contractArtifact = require("../../abis/CaptureTheFlag.json");
 const contractAbi = contractArtifact.abi;
 
-let theContract, provider, gsnProvider, logview;
+let theContract, logview;
 
 function App() {
   const [appWeb3authProvider, setAppWeb3authProvider] = React.useState(null);
+  const [provider, setProvider] = React.useState(null);
 
   const getProvider = () => {
     console.log(":D");
     console.log(appWeb3authProvider);
+    console.log(":D");
+    console.log(provider);
   };
 
   const initContract = async () => {
@@ -33,7 +36,7 @@ function App() {
 
     //const web3authProvider = await web3auth.connect();
 
-    gsnProvider = await RelayProvider.newProvider({
+    let gsnProvider = await RelayProvider.newProvider({
       provider: appWeb3authProvider,
       config: {
         loggerConfiguration: { logLevel: "debug" },
@@ -41,9 +44,9 @@ function App() {
       },
     }).init();
 
-    provider = new ethers.providers.Web3Provider(gsnProvider);
-
-    const network = await provider.getNetwork();
+    const _provider = new ethers.providers.Web3Provider(gsnProvider);
+    setProvider(_provider);
+    const network = await _provider.getNetwork();
 
     const contractAddress = "0x47F5b682A0485983E391E6e6cD1e523db2A232C6";
     theContract = new ethers.Contract(

@@ -1,11 +1,11 @@
-const { resolve } = require("path-browserify");
 const webpack = require("webpack");
+
 module.exports = function override(config) {
   const fallback = config.resolve.fallback || {};
   Object.assign(fallback, {
-    zlib: false,
-    path: false,
     fs: false,
+    path: false,
+    zlib: false,
     assert: require.resolve("assert"),
     crypto: require.resolve("crypto-browserify"),
     http: require.resolve("stream-http"),
